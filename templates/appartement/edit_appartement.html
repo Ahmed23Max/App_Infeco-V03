@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <div class="card card-body">
+        <form action="/update_appartement/{{appartement.id}}" method="POST">
+          <div class="form-group">
+            <input type="text" name="adresse" value="{{appartement.nom_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="adresse" value="{{appartement.adresse}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="complement" value="{{appartement.complement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="ville" value="{{appartement.ville}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="code_postal" value="{{appartement.code_postal}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="number" name="charges" value="{{appartement.charges}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="number" name="loyer" value="{{appartement.loyer}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="number" name="depot" value="{{appartement.depot}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

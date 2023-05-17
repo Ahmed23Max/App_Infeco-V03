@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <div class="card card-body">
+        <form action="/update_paiement/{{paiement.paiment_id}}" method="POST">
+          <div class="form-group">
+            <input type="text" name="nom_locataire" value="{{paiement.nom_locataire}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="nom_appartement" value="{{paiement.nom_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="mois" value="{{paiement.mois}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="loyer" value="{{paiement.loyer}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

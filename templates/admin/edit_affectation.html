@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <div class="card card-body">
+        <form action="/update_affectation/{{affectation.affectation_id}}" method="POST">
+          <div class="form-group">
+            <input type="text" name="nom_locataire" value="{{affectation.nom_locataire}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="prenom_locataire" value="{{affectation.prenom_locataire}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="nom_appartement" value="{{affectation.nom_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="adresse_appartement" value="{{affectation.adresse_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="complement_appartement" value="{{affectation.complement_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="ville_appartement" value="{{affectation.ville_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="codepostal_appartement" value="{{affectation.codepostal_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="number" name="charges_appartement" value="{{affectation.charges_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="number" name="loyer_appartement" value="{{affectation.loyer_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="number" name="depot_appartement" value="{{affectation.depot_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="date" name="datee_appartement" value="{{affectation.datee_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="date" name="dates_appartement" value="{{affectation.dates_appartement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <textarea name="edl_appartement" id="edl_appartement" cols="30" rows="10"
+            value="{{affectation.edl_appartement}}"  class="form-control"></textarea>
+        </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

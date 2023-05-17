@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <div class="card card-body">
+        <form action="/update_agence/{{agence.agence_id}}" method="POST">
+          <div class="form-group">
+            <input type="text" name="nom_agence" value="{{agence.nom_agence}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="adresse" value="{{agence.adresse}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="complement" value="{{agence.complement}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="ville" value="{{agence.ville}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="code_postal" value="{{agence.code_postal}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="text" name="frais" value="{{agence.frais}}" class="form-control">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
