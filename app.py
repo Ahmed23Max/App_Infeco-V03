@@ -1,8 +1,9 @@
-from flask import Flask, request, session, redirect, url_for, render_template, flash
+from flask import Flask, request, session, redirect, url_for, render_template, flash, Response
 import psycopg2 
 import psycopg2.extras
 import re 
 from werkzeug.security import generate_password_hash, check_password_hash
+from fpdf import FPDF
  
 app = Flask(__name__)
 app.secret_key = 'cairocoders-ednalan'
@@ -139,7 +140,7 @@ def add_locataire():
     if request.method == 'POST':
         nom_locataire = request.form['nom_locataire']
         prenom_locataire = request.form['prenom_locataire']
-        cur.execute("INSERT INTO locataire (nom_locataire, prenom_locataire) VALUES (%s,%s", (nom_locataire, prenom_locataire))
+        cur.execute("INSERT INTO locataire (nom_locataire, prenom_locataire) VALUES (%s,%s)", (nom_locataire, prenom_locataire))
         conn.commit()
         flash('Le locataire a bien été ajouté !')
         return redirect(url_for('Locataire'))
@@ -430,7 +431,6 @@ def get_affectation(id):
     return render_template('admin/edit_affectation.html', affectation = data[0])
 
 
-
 @app.route('/update_affectation/<id>', methods=['POST'])
 def update_affectation(id):
     if request.method == 'POST':
@@ -478,6 +478,54 @@ def delete_affectation(id):
     conn.commit()
     flash('L`affectation a bien été supprimé !')
     return redirect(url_for('Admin'))
+
+
+@app.route('/Quittance')
+def Quittance():
+    return render_template('admin/quittance.html')
+
+@app.route('/download/report/pdf')
+def download_report():
+    try:
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+          
+        cursor.execute("SELECT * FROM locataire")
+        result = cursor.fetchall()
+  
+        pdf = FPDF()
+        pdf.add_page()
+          
+        page_width = pdf.w - 2 * pdf.l_margin
+          
+        pdf.set_font('Times','B',14.0) 
+        pdf.cell(page_width, 0.0, 'Quittance Data', align='C')
+        pdf.ln(10)
+  
+        pdf.set_font('Courier', '', 12)
+          
+        col_width = page_width/4
+          
+        pdf.ln(1)
+          
+        th = pdf.font_size
+          
+        for row in result:
+            pdf.cell(col_width, th, str(row['locataire_id']), border=1)
+            pdf.cell(col_width, th, row['nom_locataire'], border=1)
+            pdf.cell(col_width, th, row['prenom_locataire'], border=1)
+            pdf.ln(th)
+          
+        pdf.ln(10)
+          
+        pdf.set_font('Times','',10.0) 
+        pdf.cell(page_width, 0.0, '- end of report -', align='C')
+          
+        return Response(pdf.output(dest='S').encode('latin-1'), mimetype='application/pdf', headers={'Content-Disposition':'attachment;filename=employee_report.pdf'})
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close() 
+        conn.close()
 
 
 if __name__ == "__main__":
