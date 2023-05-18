@@ -18,16 +18,16 @@
       <div class="card card-body">
         <form action="{{url_for('add_paiement')}}" method="POST">
             <div class="form-group">
-                <input type="text" class="form-control" name="nom_locataire" placeholder="nom_locataire">
+                <input type="text" class="form-control" name="nom_paiement" placeholder="Nom du locataire">
               </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="nom_appartement" placeholder="nom_appartement">
+                <input type="text" class="form-control" name="prenom_paiement" placeholder="Prénom du locataire">
               </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="mois" placeholder="mois">
+                <input type="text" class="form-control" name="mois_paiement" placeholder="Mois">
               </div>
             <div class="form-group">
-                <input type="text" class="form-control" name="loyer" placeholder="loyer">
+                <input type="text" class="form-control" name="loyer_paiement" placeholder="Loyer">
               </div>            
               <button class="btn btn-primary btn-block">
                 Sauvegarder 
@@ -41,7 +41,7 @@
           <tr>
             <th>ID</th>
             <th>Nom du locataire</th>
-            <th>Nom de l'appartement</th>
+            <th>Préom du locataire</th>
             <th>Mois</th>
             <th>Loyer</th>
             <th>Action</th>

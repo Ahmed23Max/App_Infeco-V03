@@ -7,10 +7,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = 'cairocoders-ednalan'
  
-DB_HOST = "localhost"
-DB_NAME = "Infeco_db"
-DB_USER = "postgres"
-DB_PASS = "qwqw"
+DB_HOST = "dpg-chdon2e7avj0djj2jd8g-a.frankfurt-postgres.render.com"
+DB_NAME = "infeco_db"
+DB_USER = "infeco_1"
+DB_PASS = "98lbxGgEybkXAaIMS6ggNKB45N7LQsE3"
  
 conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
  
@@ -137,12 +137,9 @@ def Locataire():
 def add_locataire():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if request.method == 'POST':
-        nom = request.form['nom']
-        prenom = request.form['prenom']
-        adresse = request.form['adresse']
-        ville = request.form['ville']
-        code_postal = request.form['code_postal']
-        cur.execute("INSERT INTO locataire (nom, prenom, adresse, ville, code_postal) VALUES (%s,%s,%s,%s,%s)", (nom, prenom, adresse, ville, code_postal))
+        nom_locataire = request.form['nom_locataire']
+        prenom_locataire = request.form['prenom_locataire']
+        cur.execute("INSERT INTO locataire (nom_locataire, prenom_locataire) VALUES (%s,%s", (nom_locataire, prenom_locataire))
         conn.commit()
         flash('Le locataire a bien été ajouté !')
         return redirect(url_for('Locataire'))
@@ -160,22 +157,16 @@ def get_locataire(id):
 @app.route('/update/<id>', methods=['POST'])
 def update_locataire(id):
     if request.method == 'POST':
-        nom = request.form['nom']
-        prenom = request.form['prenom']
-        adresse = request.form['adresse']
-        ville = request.form['ville']
-        code_postal = request.form['code_postal']
+        nom_locataire = request.form['nom_locataire']
+        prenom_locataire = request.form['prenom_locataire']
          
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""
             UPDATE locataire
-            SET nom = %s,
-                prenom = %s,
-                adresse = %s,
-                ville = %s,
-                code_postal = %s
+            SET nom_locataire = %s,
+                prenom_locataire = %s,
             WHERE locataire_id = %s
-        """, (nom, prenom, adresse, ville, code_postal, id))
+        """, (nom_locataire, prenom_locataire, id))
         flash('Le locataire a bien été modifié !')
         conn.commit()
         return redirect(url_for('Locataire'))
@@ -204,14 +195,14 @@ def add_appartement():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if request.method == 'POST':
         nom_appartement = request.form['nom_appartement']
-        adresse = request.form['adresse']
-        complement = request.form['complement']
-        ville = request.form['ville']
-        code_postal = request.form['code_postal']
-        charges = request.form['charges']
-        loyer = request.form['loyer']
-        depot = request.form['depot']
-        cur.execute("INSERT INTO appartement (nom_appartement, adresse, complement, ville, code_postal, charges,loyer,depot) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)", (nom_appartement, adresse, complement, ville, code_postal, charges,loyer,depot))
+        adresse_appartement = request.form['adresse_appartement']
+        complement_appartement = request.form['complement_appartement']
+        ville_appartement = request.form['ville_appartement']
+        codepostal_appartement = request.form['codepostal_appartement']
+        charges_appartement = request.form['charges_appartement']
+        loyer_appartement = request.form['loyer_appartement']
+        depot_appartement = request.form['depot_appartement']
+        cur.execute("INSERT INTO appartement (nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement, charges_appartement,loyer_appartement,depot_appartement) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)", (nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement, charges_appartement,loyer_appartement,depot_appartement))
         conn.commit()
         flash('Appartement bien ajouté !')
         return redirect(url_for('Appartement'))
@@ -230,27 +221,27 @@ def get_appartement(id):
 def update_appartement(id):
     if request.method == 'POST':
         nom_appartement = request.form['nom_appartement']
-        adresse = request.form['adresse']
-        complement = request.form['complement']
-        ville = request.form['ville']
-        code_postal = request.form['code_postal']
-        charges = request.form['charges']
-        loyer = request.form['loyer']
-        depot = request.form['depot']
+        adresse_appartement = request.form['adresse_appartement']
+        complement_appartement = request.form['complement_appartement']
+        ville_appartement = request.form['ville_appartement']
+        codepostal_appartement = request.form['codepostal_appartement']
+        charges_appartement = request.form['charges_appartement']
+        loyer_appartement = request.form['loyer_appartement']
+        depot_appartement = request.form['depot_appartement']
          
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""
             UPDATE appartement
             SET nom_appartement = %s,
-                adresse = %s,
-                complement = %s,
-                ville = %s,
-                code_postal = %s,
-                charges = %s,
-                loyer = %s,
-                depot = %s
+                adresse_appartement = %s,
+                complement_appartement = %s,
+                ville_appartement = %s,
+                codepostal_appartement = %s,
+                charges_appartement = %s,
+                loyer_appartement = %s,
+                depot_appartement = %s
             WHERE appartement_id = %s
-        """, (nom_appartement, adresse, complement, ville, code_postal, charges,loyer,depot, id))
+        """, (nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement, charges_appartement,loyer_appartement,depot_appartement, id))
         flash('Appartement a bien été modifié !')
         conn.commit()
         return redirect(url_for('Appartement'))
@@ -279,12 +270,12 @@ def add_agence():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if request.method == 'POST':
         nom_agence = request.form['nom_agence']
-        adresse = request.form['adresse']
-        complement = request.form['complement']
-        ville = request.form['ville']
-        code_postal = request.form['code_postal']
-        frais = request.form['frais']
-        cur.execute("INSERT INTO agence (nom_agence, adresse, complement, ville, code_postal, frais) VALUES (%s,%s,%s,%s,%s,%s,%s)", (nom_agence, adresse, complement, ville, code_postal, frais))
+        adresse_agence = request.form['adresse_agence']
+        complement_agence = request.form['complement_agence']
+        ville_agence = request.form['ville_agence']
+        codepostal_agence = request.form['codepostal_agence']
+        frais_agence = request.form['frais_agence']
+        cur.execute("INSERT INTO agence (nom_agence, adresse_agence, complement_agence, ville_agence, codepostal_agence, frais_agence) VALUES (%s,%s,%s,%s,%s,%s)", (nom_agence, adresse_agence, complement_agence, ville_agence, codepostal_agence, frais_agence))
         conn.commit()
         flash('L`agence a bien été ajouté !')
         return redirect(url_for('Agence'))
@@ -303,23 +294,23 @@ def get_agence(id):
 def update_agence(id):
     if request.method == 'POST':
         nom_agence = request.form['nom_agence']
-        adresse = request.form['adresse']
-        complement = request.form['complement']
-        ville = request.form['ville']
-        code_postal = request.form['code_postal']
-        frais = request.form['frais']
+        adresse_agence = request.form['adresse_agence']
+        complement_agence = request.form['complement_agence']
+        ville_agence = request.form['ville_agence']
+        codepostal_agence = request.form['codepostal_agence']
+        frais_agence = request.form['frais_agence']
          
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""
             UPDATE agence
             SET nom_agence = %s,
-                adresse = %s,
-                complement = %s,
-                ville = %s,
-                code_postal = %s,
-                frais = %s
+                adresse_agence = %s,
+                complement_agence = %s,
+                ville_agence = %s,
+                codepostal_agence = %s,
+                frais_agence = %s
             WHERE agence_id = %s
-        """, (nom_agence,adresse, complement, ville, code_postal, frais, id))
+        """, (nom_agence,adresse_agence, complement_agence, ville_agence, codepostal_agence, frais_agence, id))
         flash('L`agence a bien été modifié !')
         conn.commit()
         return redirect(url_for('Agence'))
@@ -347,11 +338,11 @@ def Paiement():
 def add_paiement():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if request.method == 'POST':
-        nom_locataire = request.form['nom_locataire']
-        nom_appartement = request.form['nom_appartement']
-        mois = request.form['mois']
-        loyer = request.form['loyer']
-        cur.execute("INSERT INTO paiement (nom_locataire, nom_appartement, mois, loyer) VALUES (%s,%s,%s,%s)", (nom_locataire, nom_appartement, mois, loyer))
+        nom_paiement = request.form['nom_paiement']
+        prenom_paiement = request.form['prenom_paiement']
+        mois_paiement = request.form['mois_paiement']
+        loyer_paiement = request.form['loyer_paiement']
+        cur.execute("INSERT INTO paiement (nom_paiement, prenom_paiement, mois_paiement, loyer_paiement) VALUES (%s,%s,%s,%s)", (nom_paiement, prenom_paiement, mois_paiement, loyer_paiement))
         conn.commit()
         flash('Le paiement a bien été ajouté !')
         return redirect(url_for('Paiement'))
@@ -369,20 +360,20 @@ def get_paiement(id):
 @app.route('/update_paiement/<id>', methods=['POST'])
 def update_paiement(id):
     if request.method == 'POST':
-        nom_locataire = request.form['nom_locataire']
-        nom_appartement = request.form['nom_appartement']
-        mois = request.form['mois']
-        loyer = request.form['loyer']
+        nom_paiement = request.form['nom_paiement']
+        prenom_paiement = request.form['prenom_paiement']
+        mois_paiement = request.form['mois_paiement']
+        loyer_paiement = request.form['loyer_paiement']
          
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""
             UPDATE paiement
-            SET nom_locataire = %s,
-                nom_appartement = %s,
-                mois = %s,
-                loyer = %s
+            SET nom_paiement = %s,
+                prenom_paiement = %s,
+                mois_paiement = %s,
+                loyer_paiement = %s
             WHERE paiment_id = %s
-        """, (nom_locataire, nom_appartement, mois, loyer, id))
+        """, (nom_paiement, prenom_paiement, mois_paiement, loyer_paiement, id))
         flash('Le paiement a bien été modifié !')
         conn.commit()
         return redirect(url_for('Paiement'))
