@@ -11,7 +11,7 @@ const btnDelete= document.querySelectorAll('.btn-delete');
         }
           
         $(document).ready(function() {
-            $('#example').DataTable({     
+            $('#tableau').DataTable({     
               "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
                 "iDisplayLength": 3
                } 
