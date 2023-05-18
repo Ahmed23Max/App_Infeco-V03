@@ -36,7 +36,6 @@
                             <a href="{{ url_for('Appartement') }}" class="dropdown-item">Appartement</a>
                             <a href="{{ url_for('Agence') }}" class="dropdown-item">Agence</a>
                             <a href="{{ url_for('Paiement') }}" class="dropdown-item">Paiement</a>
-                            <a href="{{ url_for('Quittance') }}" class="dropdown-item">Quittance</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -46,9 +45,23 @@
             </div>
         </div>
     </nav>
-
-        {% block content %}
+    <div class="d-flex flex-column p-5">
+        {% block title1 %}{% endblock %}
+        <section class="d-flex justify-content-center m-2">
+        {% block content1 %}
         {% endblock %}
+        </section>
+        {% block title2 %}{% endblock %}
+        <section class="d-flex justify-content-center m-2">
+            {% block content2 %}
+            {% endblock %}
+        </section>
+        <section class="d-flex justify-content-center m-2">
+            {% block content3 %}
+            {% endblock %}
+        </section>
+        
+    </div>
 
     <script src="static/app.js"></script>
 </body>
