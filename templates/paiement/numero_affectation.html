@@ -1,0 +1,33 @@
+<div class="form-group">
+    <label>Prénom locataire</label>
+    <select name="prenom_locataire"  id="sub_category_id" class="form-control">
+        {% for row in infos_affectation %} 
+        <option value="{{row.prenom_locataire}}">{{row.prenom_locataire}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Nom de l'appartement</label>
+    <select name="nom_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_affectation %} 
+        <option value="{{row.nom_appartement}}">{{row.nom_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Charges</label>
+    <select name="charges_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_affectation %} 
+        <option value="{{row.charges_appartement}}">{{row.charges_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Loyer</label>
+    <select name="loyer_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_affectation %} 
+        <option value="{{row.loyer_appartement}}">{{row.loyer_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+

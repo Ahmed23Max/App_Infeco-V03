@@ -41,3 +41,14 @@ const btnDelete= document.querySelectorAll('.btn-delete');
                   return false;
                 });
               }); 
+              $(document).ready(function() {
+                $('#search_affectation_id').change(function(){
+                   $.post("/get_numero_affectation", {
+                    numero_affectation: $('#search_affectation_id').val(),
+                   }, function(response){ 
+                       $('#show_affectation').html(response);
+                       $('#show_affectation').append(response.htmlresponse);
+                   });
+                   return false;
+                 });
+               }); 

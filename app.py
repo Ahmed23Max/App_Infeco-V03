@@ -335,20 +335,34 @@ def Paiement():
     p = "SELECT * FROM paiement"
     cur.execute(p) # Execute the SQL
     list_paiement = cur.fetchall()
-    return render_template('paiement/paiement.html', list_paiement = list_paiement)
+    cur.execute("SELECT * FROM affectation ORDER BY affectation_id")
+    affectation_paiement = cur.fetchall() 
+    return render_template('paiement/paiement.html', list_paiement = list_paiement, affectation_paiement = affectation_paiement)
  
 @app.route('/add_paiement', methods=['POST'])
 def add_paiement():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     if request.method == 'POST':
-        nom_paiement = request.form['nom_paiement']
-        prenom_paiement = request.form['prenom_paiement']
+        nom_locataire = request.form['nom_locataire']
+        prenom_locataire = request.form['prenom_locataire']
+        nom_appartement = request.form['nom_appartement']
+        charges_appartement = request.form['charges_appartement']
+        loyer_appartement = request.form['loyer_appartement']
         mois_paiement = request.form['mois_paiement']
-        loyer_paiement = request.form['loyer_paiement']
-        cur.execute("INSERT INTO paiement (nom_paiement, prenom_paiement, mois_paiement, loyer_paiement) VALUES (%s,%s,%s,%s)", (nom_paiement, prenom_paiement, mois_paiement, loyer_paiement))
+        cur.execute("INSERT INTO paiement (nom_locataire, prenom_locataire, nom_appartement, charges_appartement,loyer_appartement,mois_paiement) VALUES (%s,%s,%s,%s,%s,%s)", (nom_locataire, prenom_locataire, nom_appartement, charges_appartement,loyer_appartement,mois_paiement))
         conn.commit()
         flash('Le paiement a bien été ajouté !')
         return redirect(url_for('Paiement'))
+
+@app.route("/get_numero_affectation",methods=["POST","GET"])
+def get_numero_affectation():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)    
+    if request.method == 'POST':
+        numero_affectation = request.form['numero_affectation']
+        print(numero_affectation)
+        cur.execute("SELECT * FROM affectation WHERE nom_locataire = %s", [numero_affectation])
+        infos_affectation = cur.fetchall()
+    return jsonify({'htmlresponse': render_template('paiement/numero_affectation.html', infos_affectation=infos_affectation)})
  
 @app.route('/edit_paiement/<id>', methods = ['POST', 'GET'])
 def get_paiement(id):
@@ -363,20 +377,25 @@ def get_paiement(id):
 @app.route('/update_paiement/<id>', methods=['POST'])
 def update_paiement(id):
     if request.method == 'POST':
-        nom_paiement = request.form['nom_paiement']
-        prenom_paiement = request.form['prenom_paiement']
+        nom_locataire = request.form['nom_paiement']
+        prenom_locataire = request.form['prenom_paiement']
+        nom_appartement = request.form['nom_appartement']
+        charges_appartement = request.form['charges_appartement']
+        loyer_appartement = request.form['loyer_appartement']
         mois_paiement = request.form['mois_paiement']
-        loyer_paiement = request.form['loyer_paiement']
          
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""
             UPDATE paiement
-            SET nom_paiement = %s,
-                prenom_paiement = %s,
-                mois_paiement = %s,
-                loyer_paiement = %s
+            SET nom_locataire = %s,
+                prenom_locataire = %s,
+                nom_appartement = %s,
+                nom_appartement = %s,
+                charges_appartement = %s,
+                loyer_appartement = %s,
+                mois_paiement = %s
             WHERE paiment_id = %s
-        """, (nom_paiement, prenom_paiement, mois_paiement, loyer_paiement, id))
+        """, (nom_locataire, prenom_locataire, nom_appartement, charges_appartement,loyer_appartement,mois_paiement, id))
         flash('Le paiement a bien été modifié !')
         conn.commit()
         return redirect(url_for('Paiement'))

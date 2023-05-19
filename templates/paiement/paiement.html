@@ -17,17 +17,18 @@
       <div class="card card-body">
         <form action="{{url_for('add_paiement')}}" method="POST">
             <div class="form-group">
-                <input type="text" class="form-control" name="nom_paiement" placeholder="Nom du locataire">
+                <label>Selectionner Nom locataire</label>
+                <select name="nom_locataire"  id="search_affectation_id" class="form-control">
+                    <option value="" selected="selected"></option>
+                {% for row in affectation_paiement %}
+                    <option value='{{row.nom_locataire}}'>{{row.nom_locataire}}</option>
+                {% endfor %}
+                </select> 
               </div>
+            <div id="show_affectation"></div>
             <div class="form-group">
-                <input type="text" class="form-control" name="prenom_paiement" placeholder="Prénom du locataire">
-              </div>
-            <div class="form-group">
-                <input type="date" class="form-control" name="mois_paiement" placeholder="Mois">
-              </div>
-            <div class="form-group">
-                <input type="number" class="form-control" name="loyer_paiement" placeholder="Loyer">
-              </div>            
+                <input type="date" class="form-control" name="mois_paiement" placeholder="Mois" required>
+              </div>          
               <button class="btn btn-primary btn-block">
                 Sauvegarder 
               </button>
@@ -43,8 +44,10 @@
           <tr>
             <th>Nom du locataire</th>
             <th>Prénom du locataire</th>
-            <th>Mois</th>
+            <th>Nom de l'appartement</th>
+            <th>Charges</th>
             <th>Loyer</th>
+            <th>Mois</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -55,6 +58,8 @@
             <td>{{row[2]}}</td>
             <td>{{row[3]}}</td>
             <td>{{row[4]}} €</td>
+            <td>{{row[5]}} €</td>
+            <td>{{row[6]}}</td>
             <td width="130">
                 <a href="/edit_paiement/{{row[0]}}" class="btn btn-secondary btn-sm">edit</a>
                 <a href="/delete_paiement/{{row[0]}}" class="btn btn-danger btn-delete btn-sm">delete</a>
