@@ -1,0 +1,8 @@
+<div class="form-group">
+    <label>Prénom locataire</label>
+    <select name="prenom_locataire"  id="sub_category_id" class="form-control">
+        {% for row in infos_locataire %} 
+        <option value="{{row.prenom_locataire}}">{{row.prenom_locataire}}</option>
+        {% endfor %}
+    </select> 
+</div>

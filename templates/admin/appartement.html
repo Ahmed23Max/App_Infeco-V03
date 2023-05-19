@@ -1,0 +1,56 @@
+<div class="form-group">
+    <label>Adresse</label>
+    <select name="adresse_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_appartement %} 
+        <option value="{{row.adresse_appartement}}">{{row.adresse_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Complément</label>
+    <select name="complement_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_appartement %} 
+        <option value="{{row.complement_appartement}}">{{row.complement_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Ville</label>
+    <select name="ville_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_appartement %} 
+        <option value="{{row.ville_appartement}}">{{row.ville_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Code Postal</label>
+    <select name="codepostal_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_appartement %} 
+        <option value="{{row.codepostal_appartement}}">{{row.codepostal_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Charges</label>
+    <select name="charges_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_appartement %} 
+        <option value="{{row.charges_appartement}}">{{row.charges_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Loyer</label>
+    <select name="loyer_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_appartement %} 
+        <option value="{{row.loyer_appartement}}">{{row.loyer_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
+    <label>Dépôt</label>
+    <select name="depot_appartement"  id="sub_category_id" class="form-control">
+        {% for row in infos_appartement %} 
+        <option value="{{row.depot_appartement}}">{{row.depot_appartement}}</option>
+        {% endfor %}
+    </select>
+</div>

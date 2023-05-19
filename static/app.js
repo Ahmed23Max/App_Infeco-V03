@@ -19,3 +19,25 @@ const btnDelete= document.querySelectorAll('.btn-delete');
         } );
 
 
+        $(document).ready(function() {
+            $('#search_locataire_id').change(function(){
+               $.post("/get_nom_locataire", {
+                nom_locataire: $('#search_locataire_id').val(),
+               }, function(response){ 
+                   $('#show_locataire').html(response);
+                   $('#show_locataire').append(response.htmlresponse);
+               });
+               return false;
+             });
+           }); 
+           $(document).ready(function() {
+               $('#search_appartement_id').change(function(){
+                  $.post("/get_nom_appartement", {
+                    nom_appartement: $('#search_appartement_id').val(),
+                  }, function(response){ 
+                      $('#show_appartement').html(response);
+                      $('#show_appartement').append(response.htmlresponse);
+                  });
+                  return false;
+                });
+              }); 

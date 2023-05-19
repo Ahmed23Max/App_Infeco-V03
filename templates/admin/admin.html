@@ -18,37 +18,28 @@
                 <div class="card card-body">
                     <form action="{{url_for('affectation')}}" method="POST">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="nom_locataire" placeholder="Nom du locataire" required>
+                            <label>Selectionner Nom locataire</label>
+                            <select name="nom_locataire"  id="search_locataire_id" class="form-control">
+                                <option value="" selected="selected"></option>
+                            {% for row in locataire %}
+                                <option value='{{row.nom_locataire}}'>{{row.nom_locataire}}</option>
+                            {% endfor %}
+                            </select> 
                         </div>
+                        <div id="show_locataire"></div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="prenom_locataire" placeholder="Prénom du locataire" required>
+                            <label>Selectionner l'appartement</label>
+                            <select name="nom_appartement"  id="search_appartement_id" class="form-control">
+                              <option value="" selected="selected"></option>
+                              {% for row in appartement %}
+                              <option value='{{row.nom_appartement}}'>{{row.nom_appartement}}</option>
+                              {% endfor %}
+                            </select> 
                         </div>
+                        <div id="show_appartement"></div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="nom_appartement" placeholder="Nom de l'appartement" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="adresse_appartement" placeholder="Adresse" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="complement_appartement" placeholder="Complément" >
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="ville_appartement" placeholder="Ville" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="codepostal_appartement" placeholder="Code Postal" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="number" class="form-control" name="charges_appartement" placeholder="Charges" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="number" class="form-control" name="loyer_appartement" placeholder="Loyer" >
-                        </div>
-                        <div class="form-group">
-                            <input type="number" class="form-control" name="depot_appartement" placeholder="Dépôt" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="date" class="form-control" name="datee_appartement" placeholder="Date d'entrée" required>
+                            <label>Date d'entrée</label>
+                            <input type="date" class="form-control" name="datee_appartement"required>
                         </div>
                         <div class="form-group">
                             <textarea name="edl_appartement" id="edl_appartement" cols="30" rows="10"
@@ -87,19 +78,19 @@
                 <tbody>
                     {% for row in list_des_affectations %}
                     <tr>
+                        <td>{{row[1]}}</td>
                         <td>{{row[2]}}</td>
                         <td>{{row[3]}}</td>
+                        <td>{{row[4]}}</td>
                         <td>{{row[5]}}</td>
                         <td>{{row[6]}}</td>
                         <td>{{row[7]}}</td>
-                        <td>{{row[8]}}</td>
-                        <td>{{row[9]}}</td>
+                        <td>{{row[8]}} €</td>
+                        <td>{{row[9]}} €</td>
                         <td>{{row[10]}} €</td>
-                        <td>{{row[11]}} €</td>
-                        <td>{{row[12]}} €</td>
+                        <td>{{row[11]}}</td>
+                        <td>{{row[12]}}</td>
                         <td>{{row[13]}}</td>
-                        <td>{{row[14]}}</td>
-                        <td>{{row[15]}}</td>
     
                         <td>
                             <a href="/edit_affectation/{{row[0]}}" class="btn btn-secondary btn-sm">edit</a>

@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, url_for, render_template, flash, Response
+from flask import Flask, request, session, redirect, url_for, render_template, flash, Response,jsonify
 import psycopg2 
 import psycopg2.extras
 import re 
@@ -133,6 +133,17 @@ def Locataire():
     cur.execute(l) # Execute the SQL
     list_locataire = cur.fetchall()
     return render_template('locataire/locataire.html', list_locataire = list_locataire)
+
+@app.route('/add_locataire', methods=['POST'])
+def add_locataire():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if request.method == 'POST':
+        nom_locataire = request.form['nom_locataire']
+        prenom_locataire = request.form['prenom_locataire']
+        cur.execute("INSERT INTO locataire (nom_locataire, prenom_locataire) VALUES (%s,%s)", (nom_locataire, prenom_locataire))
+        conn.commit()
+        flash('Le locataire a bien été ajouté !')
+        return redirect(url_for('Locataire'))
  
  
 @app.route('/edit/<id>', methods = ['POST', 'GET'])
@@ -180,6 +191,23 @@ def Appartement():
     cur.execute(a) # Execute the SQL
     list_appartement = cur.fetchall()
     return render_template('appartement/appartement.html', list_appartement = list_appartement)
+
+@app.route('/add_appartement', methods=['POST'])
+def add_appartement():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    if request.method == 'POST':
+        nom_appartement = request.form['nom_appartement']
+        adresse_appartement = request.form['adresse_appartement']
+        complement_appartement = request.form['complement_appartement']
+        ville_appartement = request.form['ville_appartement']
+        codepostal_appartement = request.form['codepostal_appartement']
+        charges_appartement = request.form['charges_appartement']
+        loyer_appartement = request.form['loyer_appartement']
+        depot_appartement = request.form['depot_appartement']
+        cur.execute("INSERT INTO appartement (nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement,charges_appartement,loyer_appartement,depot_appartement) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)", (nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement,charges_appartement,loyer_appartement,depot_appartement))
+        conn.commit()
+        flash('Appartement bien ajouté !')
+        return redirect(url_for('Appartement'))
  
  
 @app.route('/edit_appartement/<id>', methods = ['POST', 'GET'])
@@ -371,7 +399,12 @@ def Admin():
     la = "SELECT * FROM affectation"
     cur.execute(la) # Execute the SQL
     list_des_affectations = cur.fetchall()
-    return render_template('admin/admin.html', list_des_affectations = list_des_affectations)
+    cur.execute("SELECT * FROM locataire ORDER BY locataire_id")
+    locataire = cur.fetchall() 
+    cur.execute("SELECT * FROM appartement ORDER BY appartement_id")
+    appartement = cur.fetchall() 
+    return render_template('admin/admin.html', list_des_affectations = list_des_affectations, locataire=locataire, appartement = appartement)
+
 
 @app.route('/affectation', methods=['POST'])
 def affectation():
@@ -390,11 +423,29 @@ def affectation():
         datee_appartement = request.form['datee_appartement']
         edl_appartement = request.form['edl_appartement']
         cur.execute("INSERT INTO affectation (nom_locataire, prenom_locataire, nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement, charges_appartement, loyer_appartement, depot_appartement,datee_appartement,edl_appartement) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (nom_locataire, prenom_locataire, nom_appartement, adresse_appartement,complement_appartement, ville_appartement, codepostal_appartement, charges_appartement, loyer_appartement, depot_appartement,datee_appartement,edl_appartement))
-        cur.execute("INSERT INTO locataire (nom_locataire, prenom_locataire) VALUES (%s,%s)", (nom_locataire, prenom_locataire))
-        cur.execute("INSERT INTO appartement (nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement, charges_appartement, loyer_appartement, depot_appartement)   VALUES (%s,%s,%s,%s,%s,%s,%s,%s)", (nom_appartement, adresse_appartement, complement_appartement, ville_appartement, codepostal_appartement, charges_appartement, loyer_appartement, depot_appartement))
         conn.commit()
         flash('Le locataire a bien été ajouté !')
         return redirect(url_for('Admin'))
+    
+@app.route("/get_nom_locataire",methods=["POST","GET"])
+def get_nom_locataire():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)    
+    if request.method == 'POST':
+        nom_locataire = request.form['nom_locataire']
+        print(nom_locataire)
+        cur.execute("SELECT * FROM locataire WHERE nom_locataire = %s", [nom_locataire])
+        infos_locataire = cur.fetchall()
+    return jsonify({'htmlresponse': render_template('admin/locataire.html', infos_locataire=infos_locataire)})
+
+@app.route("/get_nom_appartement",methods=["POST","GET"])
+def get_nom_appartement():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)    
+    if request.method == 'POST':
+        nom_appartement = request.form['nom_appartement']
+        print(nom_appartement)
+        cur.execute("SELECT * FROM appartement WHERE nom_appartement = %s", [nom_appartement])
+        infos_appartement= cur.fetchall()
+    return jsonify({'htmlresponse': render_template('admin/appartement.html', infos_appartement=infos_appartement)})
 
 @app.route('/edit_affectation/<id>', methods = ['POST', 'GET'])
 def get_affectation(id):
@@ -454,6 +505,8 @@ def delete_affectation(id):
     conn.commit()
     flash('L`affectation a bien été supprimé !')
     return redirect(url_for('Admin'))
+
+
 
 
 
