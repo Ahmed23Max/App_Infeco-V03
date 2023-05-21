@@ -1,12 +1,12 @@
-from flask import Flask, request, session, redirect, url_for, render_template, flash, Response,jsonify
+from flask import Flask, request, session, redirect, url_for, render_template, flash,jsonify
 import psycopg2 
 import psycopg2.extras
 import re 
 from werkzeug.security import generate_password_hash, check_password_hash
-from fpdf import FPDF
+
  
 app = Flask(__name__)
-app.secret_key = 'cairocoders-ednalan'
+app.secret_key = 'infeco_organization'
  
 DB_HOST = "dpg-chdon2e7avj0djj2jd8g-a.frankfurt-postgres.render.com"
 DB_NAME = "infeco_db"
@@ -20,45 +20,44 @@ conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_
  
 @app.route('/')
 def home():
-    # Check if user is loggedin
+
     if 'loggedin' in session:
     
-        # User is loggedin show them the home page
+
         return render_template('home.html', username=session['username'])
-    # User is not loggedin redirect to login page
+
     return redirect(url_for('login'))
  
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
    
-    # Check if "username" and "password" POST requests exist (user submitted form)
+
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
         print(password)
- 
-        # Check if account exists using MySQL
+
         cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
-        # Fetch one record and return result
+
         account = cursor.fetchone()
  
         if account:
             password_rs = account['password']
             print(password_rs)
-            # If account exists in users table in out database
+
             if check_password_hash(password_rs, password):
-                # Create session data, we can access this data in other routes
+
                 session['loggedin'] = True
                 session['id'] = account['id']
                 session['username'] = account['username']
-                # Redirect to home page
+
                 return redirect(url_for('home'))
             else:
-                # Account doesnt exist or username/password incorrect
+
                 flash('Incorrect username/password')
         else:
-            # Account doesnt exist or username/password incorrect
+
             flash('Incorrect username/password')
  
     return render_template('login/login.html')
@@ -67,9 +66,9 @@ def login():
 def register():
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
  
-    # Check if "username", "password" and "email" POST requests exist (user submitted form)
+
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
-        # Create variables for easy access
+
         fullname = request.form['fullname']
         username = request.form['username']
         password = request.form['password']
@@ -77,51 +76,50 @@ def register():
     
         _hashed_password = generate_password_hash(password)
  
-        #Check if account exists using MySQL
+
         cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
         account = cursor.fetchone()
         print(account)
-        # If account exists show error and validation checks
+   
         if account:
-            flash('Account already exists!')
+            flash('Ce compte existe déjà!')
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            flash('Invalid email address!')
+            flash('Adresse email invalide!')
         elif not re.match(r'[A-Za-z0-9]+', username):
-            flash('Username must contain only characters and numbers!')
+            flash('Le nom d`utilisateur doit contenir que des charactères et chiffres!')
         elif not username or not password or not email:
-            flash('Please fill out the form!')
+            flash('Remplissez tout le formulaire svp!')
         else:
-            # Account doesnt exists and the form data is valid, now insert new account into users table
             cursor.execute("INSERT INTO users (fullname, username, password, email) VALUES (%s,%s,%s,%s)", (fullname, username, _hashed_password, email))
             conn.commit()
-            flash('You have successfully registered!')
+            flash('Vous êtes connecté avec succées!')
     elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        flash('Please fill out the form!')
-    # Show registration form with message (if any)
+
+        flash('Remplissez tout le formulaire svp!')
+
     return render_template('login/register.html')
    
    
 @app.route('/logout')
 def logout():
-    # Remove session data, this will log the user out
+
    session.pop('loggedin', None)
    session.pop('id', None)
    session.pop('username', None)
-   # Redirect to login page
+
    return redirect(url_for('login'))
   
 @app.route('/profile')
 def profile(): 
     cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
    
-    # Check if user is loggedin
+
     if 'loggedin' in session:
         cursor.execute('SELECT * FROM users WHERE id = %s', [session['id']])
         account = cursor.fetchone()
-        # Show the profile page with account info
+
         return render_template('profile.html', account=account)
-    # User is not loggedin redirect to login page
+
     return redirect(url_for('login'))
 
 #LOCATAIRE
@@ -130,7 +128,7 @@ def profile():
 def Locataire():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     l = "SELECT * FROM locataire"
-    cur.execute(l) # Execute the SQL
+    cur.execute(l)
     list_locataire = cur.fetchall()
     return render_template('locataire/locataire.html', list_locataire = list_locataire)
 
@@ -187,7 +185,7 @@ def delete_locataire(id):
 def Appartement():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     a = "SELECT * FROM appartement"
-    cur.execute(a) # Execute the SQL
+    cur.execute(a)
     list_appartement = cur.fetchall()
     return render_template('appartement/appartement.html', list_appartement = list_appartement)
 
@@ -263,7 +261,7 @@ def delete_appartement(id):
 def Agence():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     a = "SELECT * FROM agence"
-    cur.execute(a) # Execute the SQL
+    cur.execute(a)
     list_agence = cur.fetchall()
     return render_template('agence/agence.html', list_agence = list_agence)
  
@@ -332,7 +330,7 @@ def delete_agence(id):
 def Paiement():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     p = "SELECT * FROM paiement"
-    cur.execute(p) # Execute the SQL
+    cur.execute(p)
     list_paiement = cur.fetchall()
     cur.execute("SELECT * FROM affectation ORDER BY affectation_id")
     affectation_paiement = cur.fetchall() 
@@ -415,7 +413,7 @@ def delete_paiement(id):
 def Admin():
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     la = "SELECT * FROM affectation"
-    cur.execute(la) # Execute the SQL
+    cur.execute(la)
     list_des_affectations = cur.fetchall()
     cur.execute("SELECT * FROM locataire ORDER BY locataire_id")
     locataire = cur.fetchall() 
@@ -523,12 +521,6 @@ def delete_affectation(id):
     conn.commit()
     flash('L`affectation a bien été supprimé !')
     return redirect(url_for('Admin'))
-
-
-
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
