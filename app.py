@@ -146,7 +146,7 @@ def add_locataire():
         return redirect(url_for('Locataire'))
  
  
-@app.route('/edit/<id>', methods = ['POST', 'GET'])
+@app.route('/edit_locataire/<id>', methods = ['POST', 'GET'])
 def get_locataire(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
    
@@ -156,24 +156,23 @@ def get_locataire(id):
     print(data[0])
     return render_template('locataire/edit_locataire.html', locataire = data[0])
  
-@app.route('/update/<id>', methods=['POST'])
+@app.route('/update_locataire/<id>', methods=['POST'])
 def update_locataire(id):
     if request.method == 'POST':
         nom_locataire = request.form['nom_locataire']
         prenom_locataire = request.form['prenom_locataire']
-         
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("""
             UPDATE locataire
             SET nom_locataire = %s,
-                prenom_locataire = %s,
+                prenom_locataire = %s
             WHERE locataire_id = %s
         """, (nom_locataire, prenom_locataire, id))
         flash('Le locataire a bien été modifié !')
         conn.commit()
-        return redirect(url_for('Locataire'))
+        return redirect(url_for('Appartement'))
  
-@app.route('/delete/<string:id>', methods = ['POST','GET'])
+@app.route('/delete_locataire/<string:id>', methods = ['POST','GET'])
 def delete_locataire(id):
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
    
